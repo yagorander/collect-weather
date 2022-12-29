@@ -1,7 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from weather_api.app.utils import request_id_exists, collect_weather_data, get_percentage_done
 from pydantic import BaseModel, validator
-
 
 app = FastAPI()
 
@@ -16,8 +15,8 @@ class PostPayload(BaseModel):
         return v
 
 @app.post("/all_cities")
-def get_all_cities(payload: PostPayload):
-    collect_weather_data(payload.request_id)
+def get_all_cities(payload: PostPayload, background_tasks: BackgroundTasks):
+    background_tasks.add_task(collect_weather_data, payload.request_id)
     return {"message": "request accepted"}
 
 @app.get("/progress/{request_id}")
