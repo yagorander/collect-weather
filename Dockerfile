@@ -11,4 +11,6 @@ RUN apt-get update \
     && poetry config virtualenvs.create false \
     && poetry install
 
+ENV TZ=America/Sao_Paulo
+
 ENTRYPOINT ["bash", "run.sh"]
