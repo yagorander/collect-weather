@@ -44,8 +44,11 @@ async def call_weather_api(retry_client, city_id, request_id):
 async def collect_weather_data(request_id):
     retry_options = aiohttp_retry.ListRetry([10, 20, 30])
     async with aiohttp_retry.RetryClient(retry_options=retry_options) as retry_client:
-        for city_id in ALL_CITY_IDS:
-            await call_weather_api(retry_client, city_id, request_id)
+        for i in range(0, len(ALL_CITY_IDS), settings.CHUNK_SIZE):
+            batch = ALL_CITY_IDS[i : i + settings.CHUNK_SIZE]
+            await asyncio.gather(
+                *[call_weather_api(retry_client, city_id, request_id) for city_id in batch]
+            )
 
 
 @db_session
