@@ -2,10 +2,8 @@ import json
 from weather_api.app import settings
 from weather_api.app.db import WeatherData
 from logging import getLogger
-import asyncio
-import aiohttp_retry
+import requests
 from pony.orm import db_session, select
-from time import sleep
 
 
 logger = getLogger(__name__)
@@ -21,14 +19,14 @@ ALL_CITY_IDS = get_city_ids()
 
 
 @db_session
-async def call_weather_api(retry_client, city_id, request_id):
+def call_weather_api(session, city_id, request_id):
     query_params = {
         "id": city_id,
         "appid": settings.API_KEY,
         "units": "metric",
     }
-    async with retry_client.get(settings.OPEN_WEATHER_BASE_URL, params=query_params) as r:
-        r = await r.json()
+    with session.get(settings.OPEN_WEATHER_BASE_URL, params=query_params) as r:
+        r = r.json()
         data = {
             "city_id": city_id,
             "temp": r["main"]["temp"],
@@ -41,11 +39,12 @@ async def call_weather_api(retry_client, city_id, request_id):
         )
 
 
-async def collect_weather_data(request_id):
-    retry_options = aiohttp_retry.ListRetry([10, 20, 30])
-    async with aiohttp_retry.RetryClient(retry_options=retry_options) as retry_client:
+def collect_weather_data(request_id):
+    with requests.Session() as session:
+        retries = requests.adapters.Retry(total=4, backoff_factor=5)
+        session.mount("https://", requests.adapters.HTTPAdapter(max_retries=retries))
         for city_id in ALL_CITY_IDS:
-            await call_weather_api(retry_client, city_id, request_id)
+            call_weather_api(session, city_id, request_id)
 
 
 @db_session
