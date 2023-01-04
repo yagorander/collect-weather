@@ -5,7 +5,6 @@ from logging import getLogger
 import asyncio
 import aiohttp_retry
 from pony.orm import db_session, select
-from time import sleep
 
 
 logger = getLogger(__name__)
