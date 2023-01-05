@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "weather-api"
+version = "0.1.0"
+description = ""
+authors = ["Yago Randerson <yagoranderson@yahoo.com.br>"]
+readme = "README.md"
+packages = [{include = "weather_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.88.0"
+pony = "^0.7.16"
+psycopg2-binary = "^2.9.5"
+aiohttp-retry = "^2.8.3"
+pytest = "^7.2.0"
+pytest-asyncio = "^0.20.3"
+pytest-dotenv = "^0.5.2"
+pytest-mock = "^3.10.0"
+pytest-cov = "^4.0.0"
+httpx = "^0.23.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

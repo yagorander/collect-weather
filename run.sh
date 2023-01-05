@@ -1,0 +1,1 @@
+while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn weather_api.app.main:app --reload --host 0.0.0.0
