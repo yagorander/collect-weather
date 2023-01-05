@@ -23,7 +23,7 @@ The API has two endpoints:
     Returns the progress of the data collection
 
 ## How to run tests
-Run `docker-compose exec bash run_tests.sh`
+Run `docker-compose exec bash run_tests.sh`. It will prompt the test results and coverage report.
 
 
 ## About the project
