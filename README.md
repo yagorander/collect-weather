@@ -2,7 +2,7 @@
 Simple API that collects weather data from Open Weather API asynchronously
 
 ## How to run
-Simply run `docker-compose up` and the Swagger UI will be available at `http://localhost:8000/docs`. This will start two containers:
+First build with `docker-compose build` and then simply run `docker-compose up` and the Swagger UI will be available at `http://localhost:8000/docs`. This will start two containers:
 - `weather_api` - The API
 - `postgres` - The database
 
