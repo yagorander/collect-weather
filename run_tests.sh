@@ -1,0 +1,1 @@
+pytest tests/ -vv --cov=weather_api/
